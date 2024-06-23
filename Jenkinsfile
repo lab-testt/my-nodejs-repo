@@ -12,37 +12,52 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                cloneRepository {
-                    url 'https://github.com/lab-testt/my-nodejs-repo.git'
+                script {
+                    echo 'Starting Clone Repository stage...'
+                    cloneRepository {
+                        url 'https://github.com/lab-testt/my-nodejs-repo.git'
+                    }
                 }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                buildDockerImage {
-                    dockerImage DOCKER_IMAGE
+                script {
+                    echo 'Starting Build Docker Image stage...'
+                    buildDockerImage {
+                        dockerImage DOCKER_IMAGE
+                    }
                 }
             }
         }
 
         stage('Docker Login and Push') {
             steps {
-                dockerLoginAndPush {
-                    credentialsId 'dockerhub'
+                script {
+                    echo 'Starting Docker Login and Push stage...'
+                    dockerLoginAndPush {
+                        credentialsId 'dockerhub'
+                    }
                 }
             }
         }
 
         stage('Install Docker Compose') {
             steps {
-                installDockerCompose()
+                script {
+                    echo 'Starting Install Docker Compose stage...'
+                    installDockerCompose()
+                }
             }
         }
 
         stage('Deploy') {
             steps {
-                deploy()
+                script {
+                    echo 'Starting Deploy stage...'
+                    deploy()
+                }
             }
         }
     }

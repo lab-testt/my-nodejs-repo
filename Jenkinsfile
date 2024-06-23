@@ -1,13 +1,27 @@
-// Jenkinsfile
+@Library('jenkins-shared-library') _
 
-@Library('your-shared-library') _
+pipeline {
+    agent any
 
-cloneRepository('github', 'https://github.com/lab-testt/my-nodejs-repo.git')
+    environment {
+        DOCKER_CREDENTIALS_ID = 'dockerhub'
+        GITHUB_CREDENTIALS = credentials('github')
+        DOCKER_IMAGE = 'labbtest/nodejs-postgres-app'
+    }
 
-buildDockerImage('labbtest/Node.js-project:latest')
+    stages {
+        cloneRepository {
+            branch = 'main'
+            credentialsId = 'github'
+            url = 'https://github.com/lab-testt/my-nodejs-repo.git'
+        }
 
-dockerLoginAndPush('labbtest/node.js-project:latest', 'dockerhub')
+        buildDockerImage()
 
-installDockerCompose()
+        dockerLogin()
 
-deploy('docker-compose.yml')
+        installDockerCompose()
+
+        deploy()
+    }
+}

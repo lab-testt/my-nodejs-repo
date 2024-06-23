@@ -17,6 +17,8 @@ pipeline {
                     cloneRepository {
                         url 'https://github.com/lab-testt/my-nodejs-repo.git'
                     }
+                                echo 'Clone Repository stage completed.'
+
                 }
             }
         }
